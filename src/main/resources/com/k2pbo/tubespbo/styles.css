@@ -1,0 +1,169 @@
+.root {
+    -fx-background-color: #1a1a1a;
+    -fx-text-fill: #1a1a1a;
+}
+
+.table-view {
+    -fx-background-color: #2d2d2d;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0, 0, 2);
+    -fx-background-radius: 5;
+    -fx-table-cell-border-color: transparent;
+    -fx-fixed-cell-size: 40; /* Mengatur tinggi baris */
+}
+
+.table-view .table-column {
+    -fx-alignment: CENTER-LEFT;
+}
+
+.table-view .column-header {
+    -fx-background-color: #210043;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: white;
+    -fx-padding: 8px;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: #2d2d2d;
+    -fx-text-fill: white;
+    -fx-padding: 5px;
+    -fx-cell-size: 40;
+}
+
+.table-view .table-cell {
+    -fx-text-fill: white;
+    -fx-padding: 5 10 5 10;
+    -fx-alignment: center-left;
+    -fx-wrap-text: true;
+}
+
+.table-row-cell .text {
+    -fx-fill: white;
+}
+
+.table-view .table-row-cell:odd {
+    -fx-background-color: #333333;
+}
+
+.table-view .table-row-cell:selected {
+    -fx-background-color: #210043;
+    -fx-text-fill: white;
+}
+
+.table-view .table-row-cell:selected .table-cell {
+    -fx-text-fill: white;
+}
+
+.text-field, .text-area {
+    -fx-background-color: #2d2d2d;
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: #210043 ;
+}
+
+.text-area {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: #210043;
+}
+
+.text-area .content {
+    -fx-background-color: white;
+}
+
+.text-area:focused {
+    -fx-border-color: #8b3dff;
+}
+
+.button {
+    -fx-background-color: #210043 ;
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #9d5cff;
+}
+
+.button.delete {
+    -fx-background-color: #ff3d3d;
+}
+
+.button.delete:hover {
+    -fx-background-color: #ff5c5c;
+}
+
+.star-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ffd700;
+    -fx-font-size: 18px;
+    -fx-cursor: hand;
+}
+
+.star-button:hover {
+    -fx-effect: dropshadow(gaussian, #ffd700, 10, 0, 0, 0);
+}
+
+.search-box {
+    -fx-background-color: #2d2d2d;
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-color: #210043 ;
+    -fx-padding: 5 15;
+}
+
+.combo-box {
+    -fx-background-color: #2d2d2d;
+    -fx-text-fill: white;
+    -fx-background-radius: 5;
+    -fx-border-color: #210043 ;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: #2d2d2d;
+    -fx-text-fill: white;
+}
+
+.combo-box .list-view {
+    -fx-background-color: #2d2d2d;
+    -fx-text-fill: white;
+}
+
+.check-box {
+    -fx-text-fill: white;
+}
+
+.check-box .box {
+    -fx-background-color: #2d2d2d;
+    -fx-border-color: #210043 ;
+}
+
+.check-box:selected .box {
+    -fx-background-color: #210043 ;
+}
+
+.titled-pane {
+    -fx-text-fill: white;
+}
+
+.titled-pane > .title {
+    -fx-background-color: #2d2d2d;
+    -fx-border-color: #210043 ;
+}
+
+.titled-pane > .content {
+    -fx-background-color: #2d2d2d;
+}
+
+.label {
+    -fx-text-fill: white;
+}
