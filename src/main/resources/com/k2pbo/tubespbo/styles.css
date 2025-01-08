@@ -10,6 +10,7 @@
     -fx-background-radius: 5;
     -fx-table-cell-border-color: transparent;
     -fx-fixed-cell-size: 40; /* Mengatur tinggi baris */
+    -fx-alignment: CENTER-LEFT;
 }
 
 .table-view .table-column {
@@ -20,11 +21,15 @@
     -fx-background-color: #210043;
     -fx-text-fill: white;
     -fx-font-weight: bold;
+    -fx-size: 40px;
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 0 5 0 5;
 }
 
 .table-view .column-header .label {
     -fx-text-fill: white;
-    -fx-padding: 8px;
+    -fx-padding: 5 5 5 5;
+    -fx-alignment: CENTER-LEFT;
 }
 
 .table-view .table-row-cell {
@@ -36,8 +41,8 @@
 
 .table-view .table-cell {
     -fx-text-fill: white;
-    -fx-padding: 5 10 5 10;
-    -fx-alignment: center-left;
+    -fx-padding: 5 5 5 5;
+    -fx-alignment: CENTER-LEFT;
     -fx-wrap-text: true;
 }
 

@@ -52,20 +52,26 @@ public class ContactController {
     }
 
     private void setupTableColumns() {
-        // Basic setup
+        // Basic setup with alignment
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        nameColumn.setStyle("-fx-alignment: CENTER-LEFT;");
+        
         phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        phoneColumn.setStyle("-fx-alignment: CENTER-LEFT;");
+        
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
+        emailColumn.setStyle("-fx-alignment: CENTER-LEFT;");
+        
         addressColumn.setCellValueFactory(new PropertyValueFactory<>("address"));
+        addressColumn.setStyle("-fx-alignment: CENTER-LEFT;");
+        
         categoryColumn.setCellValueFactory(new PropertyValueFactory<>("category"));
+        categoryColumn.setStyle("-fx-alignment: CENTER-LEFT;");
+        
         favoriteColumn.setCellValueFactory(new PropertyValueFactory<>("favorite"));
+        favoriteColumn.setStyle("-fx-alignment: CENTER;");
 
         // Set column widths and properties
-        favoriteColumn.setResizable(false);
-        favoriteColumn.setMaxWidth(40);
-        favoriteColumn.setMinWidth(40);
-
-        // Bind column widths to table width
         contactTable.widthProperty().addListener((obs, oldVal, newVal) -> {
             double width = newVal.doubleValue();
             double remainingWidth = width - favoriteColumn.getWidth();
@@ -77,14 +83,6 @@ public class ContactController {
             categoryColumn.setPrefWidth(remainingWidth * 0.10);
         });
 
-        // Enable text wrapping for all columns
-        nameColumn.setStyle("-fx-wrap-text: true");
-        phoneColumn.setStyle("-fx-wrap-text: true");
-        emailColumn.setStyle("-fx-wrap-text: true");
-        addressColumn.setStyle("-fx-wrap-text: true");
-        categoryColumn.setStyle("-fx-wrap-text: true");
-
-        // Set up cell factories for text wrapping
         setupColumnCellFactories();
     }
 
@@ -125,7 +123,7 @@ public class ContactController {
     }
 
     private TableCell<Contact, String> createStyledCell() {
-        TableCell<Contact, String> cell = new TableCell<Contact, String>() {
+        return new TableCell<Contact, String>() {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
@@ -134,14 +132,11 @@ public class ContactController {
                     setGraphic(null);
                 } else {
                     setText(item);
-                    setStyle("-fx-text-fill: white; -fx-wrap-text: true;");
+                    setStyle("-fx-text-fill: white; -fx-padding: 5 5 5 5;");
                     setWrapText(true);
-                    // Set minimum height untuk cell
-                    setMinHeight(40);
                 }
             }
         };
-        return cell;
     }
 
     private void setupComboBoxes() {
