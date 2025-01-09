@@ -8,4 +8,5 @@ module com.k2pbo.tubespbo {
 
     opens com.k2pbo.tubespbo to javafx.fxml;
     exports com.k2pbo.tubespbo;
+    requires transitive java.sql;
 }

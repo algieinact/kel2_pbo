@@ -4,6 +4,7 @@ public class Contact {
     public enum Category { PERSONAL, WORK, FAMILY, FRIENDS }
     
     private String name;
+    private int id;
     private String phone;
     private String email;
     private String address;
@@ -42,6 +43,13 @@ public class Contact {
     public boolean isFavorite() { return favorite; }
     public void setFavorite(boolean favorite) { this.favorite = favorite; }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     @Override
     public String toString() {
         return name; // This helps with display in combo boxes
