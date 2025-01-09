@@ -17,24 +17,32 @@ public class ContactDao {
     // CREATE: Menambahkan kontak baru
     public boolean addContact(Contact contact) {
         String sql = "INSERT INTO contacts (name, phone, email, address, category, favorite, notes) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, contact.getName());
-            statement.setString(2, contact.getPhone());
-            statement.setString(3, contact.getEmail());
-            statement.setString(4, contact.getAddress());
-            statement.setString(5, contact.getCategory().name());
-            statement.setBoolean(6, contact.isFavorite());
-            statement.setString(7, contact.getNotes());
-
-            int rowsInserted = statement.executeUpdate();
-            return rowsInserted > 0;
-
+        try (Connection conn = DatabaseConnection.getConnection(); 
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, contact.getName());
+            stmt.setString(2, contact.getPhone());
+            stmt.setString(3, contact.getEmail());
+            stmt.setString(4, contact.getAddress());
+            stmt.setString(5, contact.getCategory().toString());
+            stmt.setBoolean(6, contact.isFavorite());
+            stmt.setString(7, contact.getNotes());
+    
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        contact.setId(generatedKeys.getInt(1));  // Set ID yang baru
+                    }
+                }
+                return true;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
+    
+    
 
     // READ: Mengambil semua kontak
     public List<Contact> getAllContacts() {
@@ -67,38 +75,39 @@ public class ContactDao {
     // UPDATE: Memperbarui kontak berdasarkan ID
     public boolean updateContact(int id, Contact contact) {
         String sql = "UPDATE contacts SET name = ?, phone = ?, email = ?, address = ?, category = ?, favorite = ?, notes = ? WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection(); 
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, contact.getName());
+            stmt.setString(2, contact.getPhone());
+            stmt.setString(3, contact.getEmail());
+            stmt.setString(4, contact.getAddress());
+            stmt.setString(5, contact.getCategory().toString());
+            stmt.setBoolean(6, contact.isFavorite());
+            stmt.setString(7, contact.getNotes());
+            stmt.setInt(8, id);  // Gunakan ID yang sudah ada di objek contact
+            
+            int affectedRows = stmt.executeUpdate();
+            return affectedRows > 0;  // Jika ada baris yang terpengaruh, return true
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;  // Jika gagal
+    }
+    
 
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, contact.getName());
-            statement.setString(2, contact.getPhone());
-            statement.setString(3, contact.getEmail());
-            statement.setString(4, contact.getAddress());
-            statement.setString(5, contact.getCategory().name());
-            statement.setBoolean(6, contact.isFavorite());
-            statement.setString(7, contact.getNotes());
-            statement.setInt(8, id);
-
-            int rowsUpdated = statement.executeUpdate();
-            return rowsUpdated > 0;
-
+    // DELETE: Menghapus kontak berdasarkan ID
+    public boolean deleteContact(int id) {
+        String sql = "DELETE FROM contacts WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection(); 
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            int affectedRows = stmt.executeUpdate();
+            return affectedRows > 0;  // Mengembalikan true jika penghapusan berhasil
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return false;
     }
-
-    // DELETE: Menghapus kontak berdasarkan ID
-public boolean deleteContact(int id) {
-    String sql = "DELETE FROM contacts WHERE id = ?";
-    try (Connection conn = DatabaseConnection.getConnection();
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
-        stmt.setInt(1, id);
-        int rowsAffected = stmt.executeUpdate();
-        return rowsAffected > 0; // Berhasil jika ada baris yang dihapus
-    } catch (SQLException e) {
-        System.err.println("Error deleting contact: " + e.getMessage());
-        return false; // Gagal menghapus
-    }
-}
+    
 
 }

@@ -227,7 +227,7 @@ public class ContactController {
 
                 if (success) {
                     showAlert("Success", "Contact added successfully", "");
-                    contacts.add(contact);  // Update tampilan lokal
+                    loadContactsFromDatabase();  // Memuat ulang kontak dari database
                     clearFields();  // Bersihkan form input
                 } else {
                     showAlert("Error", "Failed to add contact", "Please try again.");
@@ -237,8 +237,6 @@ public class ContactController {
             showAlert("Error", "Failed to add contact", e.getMessage());
         }
     }
-
-       
 
     private boolean isInputValid() {
         String errorMessage = "";
@@ -273,6 +271,7 @@ public class ContactController {
     protected void handleEdit() {
         Contact selectedContact = contactTable.getSelectionModel().getSelectedItem();
         if (selectedContact != null) {
+            // Update contact object with edited data
             selectedContact.setName(nameField.getText());
             selectedContact.setPhone(phoneField.getText());
             selectedContact.setEmail(emailField.getText());
@@ -281,13 +280,15 @@ public class ContactController {
             selectedContact.setFavorite(favoriteButton.getText().equals("⭐"));
             selectedContact.setNotes(notesArea.getText());
 
+            // Update the contact in the database
             ContactDao contactDao = new ContactDao();
             boolean success = contactDao.updateContact(selectedContact.getId(), selectedContact);
 
             if (success) {
+                // Show success alert
                 showAlert("Success", "Contact updated successfully", "");
-                contactTable.refresh(); // Memperbarui tampilan tabel
-                clearFields();  // Bersihkan form input
+                contactTable.refresh();  // Refresh table to show updated contact
+                clearFields();  // Clear input fields
             } else {
                 showAlert("Error", "Failed to update contact", "Please try again.");
             }
@@ -295,6 +296,7 @@ public class ContactController {
             showAlert("Error", "No contact selected", "Please select a contact to edit.");
         }
     }
+
 
 
 
@@ -316,6 +318,7 @@ public class ContactController {
             showAlert("Error", "No contact selected", "Please select a contact to delete.");
         }
     }
+
 
 
     @FXML
