@@ -11,9 +11,10 @@ public class HelloApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("contact-view.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("landing-page.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 900, 600);
             stage.setTitle("Contact Manager");
+            scene.getStylesheets().add(getClass().getResource("styles-landing.css").toExternalForm());
             stage.setScene(scene);
             stage.show();
         } catch (Exception e) {

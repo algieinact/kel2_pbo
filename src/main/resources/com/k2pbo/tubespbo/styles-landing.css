@@ -1,0 +1,33 @@
+.landing-container {
+    -fx-background-color: linear-gradient(from 0% 0% to 100% 100%,rgb(18, 18, 18),rgb(28, 28, 28));
+}
+
+.app-title {
+    -fx-font-size: 42px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.welcome-text {
+    -fx-font-size: 24px;
+    -fx-text-fill: #ffffff;
+}
+
+.sub-text {
+    -fx-font-size: 16px;
+    -fx-text-fill: #cccccc;
+    -fx-padding: 0 0 20 0;
+}
+
+.enter-button {
+    -fx-background-color: #210043;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-padding: 12px 30px;
+    -fx-background-radius: 5px;
+}
+
+.enter-button:hover {
+    -fx-background-color:rgb(86, 0, 215);
+    -fx-cursor: hand;
+}
