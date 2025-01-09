@@ -1,5 +1,10 @@
 package com.k2pbo.tubespbo;
 
+import java.util.List;
+
+import com.k2pbo.tubespbo.Contact.Category;
+import com.k2pbo.tubespbo.DAO.ContactDao;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -33,6 +38,7 @@ public class ContactController {
     @FXML
     public void initialize() {
         setupTableColumns();
+        loadContactsFromDatabase(); 
         setupComboBoxes();
         setupSearch();
         setupFilters();
@@ -49,6 +55,14 @@ public class ContactController {
                 clearFields();
             }
         });
+    }
+    private void loadContactsFromDatabase() {
+        ContactDao contactDao = new ContactDao();
+        List<Contact> contactList = contactDao.getAllContacts();  // Ambil semua kontak dari database
+        contacts.clear();  // Bersihkan data sebelumnya
+        contacts.addAll(contactList);  // Tambahkan data baru ke ObservableList
+
+        contactTable.setItems(contacts);  // Set ObservableList ke TableView
     }
 
     private void setupTableColumns() {
@@ -152,11 +166,11 @@ public class ContactController {
     private void setupSearch() {
         filteredContacts = new FilteredList<>(contacts);
         contactTable.setItems(filteredContacts);
-        
+    
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             filteredContacts.setPredicate(contact -> {
                 if (newValue == null || newValue.isEmpty()) return true;
-                
+    
                 String searchText = newValue.toLowerCase();
                 return contact.getName().toLowerCase().contains(searchText) ||
                        contact.getPhone().toLowerCase().contains(searchText) ||
@@ -165,7 +179,18 @@ public class ContactController {
                        contact.getNotes().toLowerCase().contains(searchText);
             });
         });
+    }    
+
+    private void populateFields(Contact contact) {
+        nameField.setText(contact.getName());
+        phoneField.setText(contact.getPhone());
+        emailField.setText(contact.getEmail());
+        addressField.setText(contact.getAddress());
+        categoryCombo.setValue(contact.getCategory());
+        notesArea.setText(contact.getNotes());
+        updateFavoriteButton(contact.isFavorite());
     }
+
 
     private void setupFilters() {
         categoryFilter.valueProperty().addListener((obs, oldVal, newVal) -> applyFilters());
@@ -197,17 +222,28 @@ public class ContactController {
                     phoneField.getText().trim(),
                     emailField.getText().trim(),
                     addressField.getText().trim(),
-                    categoryCombo.getValue()
+                    categoryCombo.getValue()  // Memastikan kategori tidak null
                 );
                 contact.setFavorite(favoriteButton.getText().equals("⭐"));
                 contact.setNotes(notesArea.getText().trim());
-                contacts.add(contact);
-                clearFields();
+
+                ContactDao contactDao = new ContactDao();
+                boolean success = contactDao.addContact(contact);
+
+                if (success) {
+                    showAlert("Success", "Contact added successfully", "");
+                    contacts.add(contact);  // Update tampilan lokal
+                    clearFields();  // Bersihkan form input
+                } else {
+                    showAlert("Error", "Failed to add contact", "Please try again.");
+                }
             }
         } catch (Exception e) {
             showAlert("Error", "Failed to add contact", e.getMessage());
         }
     }
+
+       
 
     private boolean isInputValid() {
         String errorMessage = "";
@@ -249,19 +285,43 @@ public class ContactController {
             selectedContact.setCategory(categoryCombo.getValue());
             selectedContact.setFavorite(favoriteButton.getText().equals("⭐"));
             selectedContact.setNotes(notesArea.getText());
-            contactTable.refresh();
-            clearFields();
+
+            ContactDao contactDao = new ContactDao();
+            boolean success = contactDao.updateContact(selectedContact.getId(), selectedContact);
+
+            if (success) {
+                showAlert("Success", "Contact updated successfully", "");
+                contactTable.refresh(); // Memperbarui tampilan tabel
+                clearFields();  // Bersihkan form input
+            } else {
+                showAlert("Error", "Failed to update contact", "Please try again.");
+            }
+        } else {
+            showAlert("Error", "No contact selected", "Please select a contact to edit.");
         }
     }
+
+
 
     @FXML
     protected void handleDelete() {
         Contact selectedContact = contactTable.getSelectionModel().getSelectedItem();
         if (selectedContact != null) {
-            contacts.remove(selectedContact);
-            clearFields();
+            ContactDao contactDao = new ContactDao();
+            boolean success = contactDao.deleteContact(selectedContact.getId());
+
+            if (success) {
+                contacts.remove(selectedContact); // Hapus dari tampilan lokal
+                clearFields();  // Bersihkan form input
+                showAlert("Success", "Contact deleted successfully", "");
+            } else {
+                showAlert("Error", "Failed to delete contact", "Please try again.");
+            }
+        } else {
+            showAlert("Error", "No contact selected", "Please select a contact to delete.");
         }
     }
+
 
     @FXML
     protected void handleClear() {
@@ -284,16 +344,7 @@ public class ContactController {
         favoriteButton.setText(isFavorite ? "⭐" : "☆");
     }
 
-    private void populateFields(Contact contact) {
-        nameField.setText(contact.getName());
-        phoneField.setText(contact.getPhone());
-        emailField.setText(contact.getEmail());
-        addressField.setText(contact.getAddress());
-        categoryCombo.setValue(contact.getCategory());
-        notesArea.setText(contact.getNotes());
-        updateFavoriteButton(contact.isFavorite());
-    }
-
+    
     private void clearFields() {
         nameField.clear();
         phoneField.clear();
