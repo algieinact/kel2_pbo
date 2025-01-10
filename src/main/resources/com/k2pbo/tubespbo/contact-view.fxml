@@ -35,6 +35,7 @@
             <TableColumn fx:id="emailColumn" minWidth="150" text="Email" />
             <TableColumn fx:id="addressColumn" minWidth="150" text="Address" />
             <TableColumn fx:id="categoryColumn" minWidth="100" text="Category" />
+            <TableColumn fx:id="notesColumn" minWidth="200" text="Notes" />
         </columns>
     </TableView>
 

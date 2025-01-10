@@ -27,7 +27,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class ContactController {
     /** Komponen FXML untuk tabel dan kolom */
     @FXML private TableView<Contact> contactTable;
-    @FXML private TableColumn<Contact, String> nameColumn, phoneColumn, emailColumn, addressColumn;
+    @FXML private TableColumn<Contact, String> nameColumn, phoneColumn, emailColumn, addressColumn, notesColumn;
     @FXML private TableColumn<Contact, Contact.Category> categoryColumn;
     @FXML private TableColumn<Contact, Boolean> favoriteColumn;
     
@@ -102,17 +102,21 @@ public class ContactController {
         
         favoriteColumn.setCellValueFactory(new PropertyValueFactory<>("favorite"));
         favoriteColumn.setStyle("-fx-alignment: CENTER;");
+        
+        notesColumn.setCellValueFactory(new PropertyValueFactory<>("notes"));
+        notesColumn.setStyle("-fx-alignment: CENTER-LEFT;");
 
         // Set column widths and properties
         contactTable.widthProperty().addListener((obs, oldVal, newVal) -> {
             double width = newVal.doubleValue();
             double remainingWidth = width - favoriteColumn.getWidth();
             
-            nameColumn.setPrefWidth(remainingWidth * 0.25);
+            nameColumn.setPrefWidth(remainingWidth * 0.20);
             phoneColumn.setPrefWidth(remainingWidth * 0.15);
-            emailColumn.setPrefWidth(remainingWidth * 0.25);
-            addressColumn.setPrefWidth(remainingWidth * 0.25);
+            emailColumn.setPrefWidth(remainingWidth * 0.20);
+            addressColumn.setPrefWidth(remainingWidth * 0.15);
             categoryColumn.setPrefWidth(remainingWidth * 0.10);
+            notesColumn.setPrefWidth(remainingWidth * 0.20);
         });
 
         setupColumnCellFactories();
@@ -127,6 +131,7 @@ public class ContactController {
         phoneColumn.setCellFactory(tc -> createStyledCell());
         emailColumn.setCellFactory(tc -> createStyledCell());
         addressColumn.setCellFactory(tc -> createStyledCell());
+        notesColumn.setCellFactory(tc -> createStyledCell());
         
         // Setup category column
         categoryColumn.setCellFactory(tc -> new TableCell<Contact, Contact.Category>() {
