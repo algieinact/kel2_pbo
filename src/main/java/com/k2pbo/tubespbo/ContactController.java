@@ -20,21 +20,32 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+/**
+ * Controller untuk menangani interaksi pengguna dengan aplikasi Contact Manager
+ * Mengatur tampilan dan logika untuk mengelola data kontak
+ */
 public class ContactController {
+    /** Komponen FXML untuk tabel dan kolom */
     @FXML private TableView<Contact> contactTable;
     @FXML private TableColumn<Contact, String> nameColumn, phoneColumn, emailColumn, addressColumn;
     @FXML private TableColumn<Contact, Contact.Category> categoryColumn;
     @FXML private TableColumn<Contact, Boolean> favoriteColumn;
     
+    /** Komponen FXML untuk input dan filter */
     @FXML private TextField nameField, phoneField, emailField, addressField, searchField;
     @FXML private TextArea notesArea;
     @FXML private ComboBox<Contact.Category> categoryCombo, categoryFilter;
     @FXML private Button favoriteButton, favoriteFilter;
     
+    /** Status dan data */
     private boolean showingFavorites = false;
     private ObservableList<Contact> contacts = FXCollections.observableArrayList();
     private FilteredList<Contact> filteredContacts;
 
+    /**
+     * Inisialisasi controller
+     * Dipanggil otomatis setelah file FXML di-load
+     */
     @FXML
     public void initialize() {
         setupTableColumns();
@@ -56,6 +67,10 @@ public class ContactController {
             }
         });
     }
+
+    /**
+     * Memuat data kontak dari database
+     */
     private void loadContactsFromDatabase() {
         ContactDao contactDao = new ContactDao();
         List<Contact> contactList = contactDao.getAllContacts();  // Ambil semua kontak dari database
@@ -65,6 +80,9 @@ public class ContactController {
         contactTable.setItems(contacts);  // Set ObservableList ke TableView
     }
 
+    /**
+     * Mengatur kolom-kolom tabel
+     */
     private void setupTableColumns() {
         // Basic setup with alignment
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -100,6 +118,9 @@ public class ContactController {
         setupColumnCellFactories();
     }
 
+    /**
+     * Mengatur tampilan sel tabel
+     */
     private void setupColumnCellFactories() {
         // Setup text columns with custom cell factory
         nameColumn.setCellFactory(tc -> createStyledCell());
@@ -186,7 +207,6 @@ public class ContactController {
         updateFavoriteButton(contact.isFavorite());
     }
 
-
     private void setupFilters() {
         categoryFilter.valueProperty().addListener((obs, oldVal, newVal) -> applyFilters());
         favoriteFilter.setOnAction(event -> toggleFavoriteFilter());
@@ -208,6 +228,10 @@ public class ContactController {
         });
     }
 
+    /**
+     * Handler untuk tombol Add
+     * Menambahkan kontak baru ke database
+     */
     @FXML
     protected void handleAdd() {
         try {
@@ -267,6 +291,10 @@ public class ContactController {
         alert.showAndWait();
     }
 
+    /**
+     * Handler untuk tombol Edit
+     * Mengupdate data kontak yang dipilih
+     */
     @FXML
     protected void handleEdit() {
         Contact selectedContact = contactTable.getSelectionModel().getSelectedItem();
@@ -297,9 +325,10 @@ public class ContactController {
         }
     }
 
-
-
-
+    /**
+     * Handler untuk tombol Delete
+     * Menghapus kontak yang dipilih
+     */
     @FXML
     protected void handleDelete() {
         Contact selectedContact = contactTable.getSelectionModel().getSelectedItem();
@@ -319,13 +348,19 @@ public class ContactController {
         }
     }
 
-
-
+    /**
+     * Handler untuk tombol Clear
+     * Membersihkan form input
+     */
     @FXML
     protected void handleClear() {
         clearFields();
     }
 
+    /**
+     * Handler untuk tombol Favorite
+     * Mengubah status favorite kontak
+     */
     @FXML
     protected void toggleFavorite() {
         boolean newValue = favoriteButton.getText().equals("☆");
@@ -342,7 +377,6 @@ public class ContactController {
         favoriteButton.setText(isFavorite ? "⭐" : "☆");
     }
 
-    
     private void clearFields() {
         nameField.clear();
         phoneField.clear();

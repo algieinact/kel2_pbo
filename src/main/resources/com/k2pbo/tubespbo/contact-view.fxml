@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- Import statements untuk komponen yang digunakan -->
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="15" style="-fx-background-color: #131214;" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.k2pbo.tubespbo.ContactController">
+<!-- Root container menggunakan VBox dengan background gelap -->
+<VBox alignment="CENTER" spacing="15" style="-fx-background-color: #131214;" 
+      stylesheets="@styles.css" xmlns="http://javafx.com/javafx/23.0.1" 
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.k2pbo.tubespbo.ContactController">
+    
+    <!-- Padding untuk seluruh konten -->
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
 
+    <!-- Search bar dan filter controls -->
     <HBox alignment="CENTER_LEFT" spacing="10">
+        <!-- Search field dengan icon -->
         <TextField fx:id="searchField" promptText="🔍 Search contacts..." styleClass="search-box" HBox.hgrow="ALWAYS" />
+        <!-- Filter dropdown untuk kategori -->
         <ComboBox fx:id="categoryFilter" promptText="📁 Category" />
+        <!-- Toggle button untuk favorite filter -->
         <Button fx:id="favoriteFilter" text="⭐ Show Favorites" onAction="#toggleFavoriteFilter" />
     </HBox>
     
+    <!-- Tabel utama untuk menampilkan kontak -->
     <TableView fx:id="contactTable" VBox.vgrow="ALWAYS">
+        <!-- Definisi kolom-kolom tabel -->
         <columns>
             <TableColumn fx:id="favoriteColumn" maxWidth="40" minWidth="40" resizable="false" text="" />
             <TableColumn fx:id="nameColumn" minWidth="150" text="Name" />
@@ -37,7 +38,9 @@
         </columns>
     </TableView>
 
+    <!-- Form untuk detail kontak -->
     <TitledPane expanded="true" text="Contact Details">
+        <!-- Grid layout untuk form inputs -->
         <GridPane hgap="10" vgap="10">
             <padding>
                 <Insets bottom="10" left="10" right="10" top="10" />
@@ -64,6 +67,7 @@
             <Label text="Notes:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
             <TextArea fx:id="notesArea" prefRowCount="3" wrapText="true" GridPane.columnSpan="4" GridPane.rowIndex="4" />
             
+            <!-- Action buttons -->
             <HBox alignment="CENTER_RIGHT" spacing="10" GridPane.columnSpan="4" GridPane.rowIndex="5">
                 <Button onAction="#handleAdd" text="Add" />
                 <Button onAction="#handleEdit" text="Edit" />

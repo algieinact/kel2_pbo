@@ -1,8 +1,14 @@
 package com.k2pbo.tubespbo;
 
+/**
+ * Kelas Contact merepresentasikan data kontak dalam aplikasi
+ * Menyimpan informasi seperti nama, nomor telepon, email, dll
+ */
 public class Contact {
+    /** Enum untuk kategori kontak */
     public enum Category { PERSONAL, WORK, FAMILY, FRIENDS }
     
+    /** Properties untuk menyimpan data kontak */
     private String name;
     private int id;
     private String phone;
@@ -12,6 +18,14 @@ public class Contact {
     private Category category;
     private boolean favorite;
 
+    /**
+     * Constructor untuk membuat objek Contact baru
+     * @param name Nama kontak
+     * @param phone Nomor telepon
+     * @param email Alamat email
+     * @param address Alamat
+     * @param category Kategori kontak
+     */
     public Contact(String name, String phone, String email, String address, Category category) {
         this.name = name;
         this.phone = phone;
@@ -22,6 +36,7 @@ public class Contact {
         this.notes = "";
     }
 
+    // Getter dan Setter methods
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
     
@@ -50,6 +65,11 @@ public class Contact {
     public void setId(int id) {
         this.id = id;
     }
+
+    /**
+     * Override toString untuk menampilkan nama kontak
+     * Digunakan untuk tampilan di combo box
+     */
     @Override
     public String toString() {
         return name; // This helps with display in combo boxes
