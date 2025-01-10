@@ -1,23 +1,27 @@
 package com.k2pbo.tubespbo.DAO;
 
-import com.k2pbo.tubespbo.Contact;
-import com.k2pbo.tubespbo.DatabaseConnection;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.k2pbo.tubespbo.Contact;
+import com.k2pbo.tubespbo.DatabaseConnection;
+
 public class ContactDao {
-
-    private Connection connection;
-
+    // Hapus field connection karena kita akan menggunakan koneksi fresh setiap kali diperlukan
+    
     public ContactDao() {
-        this.connection = DatabaseConnection.getConnection();
+        // Kosongkan constructor karena tidak perlu menyimpan koneksi
     }
 
     // CREATE: Menambahkan kontak baru
     public boolean addContact(Contact contact) {
         String sql = "INSERT INTO contacts (name, phone, email, address, category, favorite, notes) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DatabaseConnection.getConnection(); 
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, contact.getName());
             stmt.setString(2, contact.getPhone());
@@ -41,30 +45,28 @@ public class ContactDao {
         }
         return false;
     }
-    
-    
 
     // READ: Mengambil semua kontak
     public List<Contact> getAllContacts() {
         List<Contact> contacts = new ArrayList<>();
         String sql = "SELECT * FROM contacts";
 
-        try (Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery(sql)) {
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet resultSet = stmt.executeQuery(sql)) {
             
             while (resultSet.next()) {
                 Contact contact = new Contact(
-                        resultSet.getString("name"),
-                        resultSet.getString("phone"),
-                        resultSet.getString("email"),
-                        resultSet.getString("address"),
-                        Contact.Category.valueOf(resultSet.getString("category"))
+                    resultSet.getString("name"),
+                    resultSet.getString("phone"),
+                    resultSet.getString("email"),
+                    resultSet.getString("address"),
+                    Contact.Category.valueOf(resultSet.getString("category"))
                 );
+                contact.setId(resultSet.getInt("id"));
                 contact.setFavorite(resultSet.getBoolean("favorite"));
                 contact.setNotes(resultSet.getString("notes"));
                 contacts.add(contact);
-                contact.setId(resultSet.getInt("id"));
-
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -75,7 +77,7 @@ public class ContactDao {
     // UPDATE: Memperbarui kontak berdasarkan ID
     public boolean updateContact(int id, Contact contact) {
         String sql = "UPDATE contacts SET name = ?, phone = ?, email = ?, address = ?, category = ?, favorite = ?, notes = ? WHERE id = ?";
-        try (Connection conn = DatabaseConnection.getConnection(); 
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, contact.getName());
             stmt.setString(2, contact.getPhone());
@@ -93,12 +95,11 @@ public class ContactDao {
         }
         return false;  // Jika gagal
     }
-    
 
     // DELETE: Menghapus kontak berdasarkan ID
     public boolean deleteContact(int id) {
         String sql = "DELETE FROM contacts WHERE id = ?";
-        try (Connection conn = DatabaseConnection.getConnection(); 
+        try (Connection conn = DatabaseConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
             int affectedRows = stmt.executeUpdate();
@@ -108,6 +109,4 @@ public class ContactDao {
         }
         return false;
     }
-    
-
 }
