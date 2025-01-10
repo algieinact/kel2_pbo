@@ -37,9 +37,17 @@ public class DatabaseConnection {
 
     /** Method untuk mendapatkan koneksi ke database */
     public Connection getConnection() {
+        try {
+            // Cek jika koneksi sudah tertutup
+            if (connection == null || connection.isClosed()) {
+                this.connection = DriverManager.getConnection(url, username, password);
+            }
+        } catch (SQLException e) {
+            System.out.println("Koneksi gagal: " + e.getMessage());
+        }
         return connection;
     }
-
+    
     // Menambahkan main method untuk test koneksi
     public static void main(String[] args) {
         System.out.println("Mencoba menghubungkan ke database...");
