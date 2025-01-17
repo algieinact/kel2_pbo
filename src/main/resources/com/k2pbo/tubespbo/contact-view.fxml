@@ -47,6 +47,7 @@
                 <Insets bottom="10" left="10" right="10" top="10" />
             </padding>
 
+            <!-- Grid label untuk Gridpane -->
             <Label text="Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
             <TextField fx:id="nameField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
             

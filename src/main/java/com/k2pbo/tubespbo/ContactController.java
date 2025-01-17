@@ -162,6 +162,7 @@ public class ContactController {
         });
     }
 
+    // Class TableCell untuk menampilknan table 
     private TableCell<Contact, String> createStyledCell() {
         return new TableCell<Contact, String>() {
             @Override
@@ -179,6 +180,8 @@ public class ContactController {
         };
     }
 
+
+    // Mengatur combo box
     private void setupComboBoxes() {
         categoryCombo.setItems(FXCollections.observableArrayList(Contact.Category.values()));
         categoryFilter.setItems(FXCollections.observableArrayList(Contact.Category.values()));
@@ -202,6 +205,7 @@ public class ContactController {
         });
     }    
 
+    // Mengisi form input dengan data kontak yang dipilih
     private void populateFields(Contact contact) {
         nameField.setText(contact.getName());
         phoneField.setText(contact.getPhone());
@@ -212,11 +216,13 @@ public class ContactController {
         updateFavoriteButton(contact.isFavorite());
     }
 
+    // Mengatur filter
     private void setupFilters() {
         categoryFilter.valueProperty().addListener((obs, oldVal, newVal) -> applyFilters());
         favoriteFilter.setOnAction(event -> toggleFavoriteFilter());
     }
 
+    // Handler untuk tombol filter
     @FXML
     protected void toggleFavoriteFilter() {
         showingFavorites = !showingFavorites;
@@ -338,8 +344,8 @@ public class ContactController {
     protected void handleDelete() {
         Contact selectedContact = contactTable.getSelectionModel().getSelectedItem();
         if (selectedContact != null) {
-            ContactDao contactDao = new ContactDao();
-            boolean success = contactDao.deleteContact(selectedContact.getId());
+            ContactDao contactDao = new ContactDao(); // Buat objek DAO
+            boolean success = contactDao.deleteContact(selectedContact.getId()); 
 
             if (success) {
                 contacts.remove(selectedContact); // Hapus dari tampilan lokal
@@ -377,11 +383,11 @@ public class ContactController {
             contactTable.refresh();
         }
     }
-
+    // Mengubah status favorite kontak
     private void updateFavoriteButton(boolean isFavorite) {
         favoriteButton.setText(isFavorite ? "⭐" : "☆");
     }
-
+    // Membersihkan form input (tombol clear)
     private void clearFields() {
         nameField.clear();
         phoneField.clear();
